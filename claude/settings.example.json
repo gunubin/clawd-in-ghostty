@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "SessionStart": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "UserPromptSubmit": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "PreToolUse": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "PostToolUse": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "Notification": [{ "matcher": "permission_prompt|elicitation_dialog", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "Stop": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }],
+    "SessionEnd": [{ "matcher": "", "hooks": [{ "type": "command", "command": "~/.config/clawd-in-ghostty/claude/clawd-state.sh" }] }]
+  }
+}
