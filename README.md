@@ -3,7 +3,9 @@
 Clawd, the Claude Code mascot, lives in the corner of every tmux pane where Claude is working.
 A single Ghostty shader that makes tmux feel alive while you work with Claude Code.
 
-<!-- TODO: demo GIF -->
+![Clawd working in four tmux panes, a hoodie developer typing, confetti and fireworks](assets/demo.gif)
+
+<sub>Rendered from the actual shader with `tools/render-demo.py`. The tmux screen in the demo is drawn, not captured.</sub>
 
 ## What it does
 
