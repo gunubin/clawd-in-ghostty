@@ -5,7 +5,7 @@ A single Ghostty shader that makes tmux feel alive while you work with Claude Co
 
 ![Clawd working in four tmux panes, a hoodie developer typing, confetti and fireworks](assets/demo.gif)
 
-<sub>Rendered from the actual shader with `tools/render-demo.py`. The tmux screen in the demo is drawn, not captured.</sub>
+<sub>A real screen recording of Ghostty and tmux. Claude's pane states are scripted so every effect shows up in under 30 seconds.</sub>
 
 ## What it does
 
