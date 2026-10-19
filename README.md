@@ -43,61 +43,40 @@ tmux status-right ──> scripts/pane-marker.sh ──> 21 colored cells
 Ghostty ──> shaders/clawd.glsl reads the cells ──> draws everything
 ```
 
-## Requirements
+## About this repository
 
-- macOS or Linux with [Ghostty](https://ghostty.org) 1.1 or later
-- tmux 3.4 or later, with the status bar at the **top**
-- [Claude Code](https://claude.com/claude-code)
-- `jq`
-- fish or zsh, only for the failed-command glow and the fireworks
+This is a reference implementation, not a packaged tool. It was extracted from my own dotfiles and has only been run on my machine. There is no installer, and it will probably need adjusting before it works in your setup.
 
-## Install
+If you want to borrow the idea, the interesting parts are the marker trick in `scripts/pane-marker.sh` and how `shaders/clawd.glsl` reads it back.
 
-```sh
-git clone https://github.com/gunubin/clawd-in-ghostty.git
-cd clawd-in-ghostty
-./install.sh
-```
+## What it assumes
 
-`install.sh` links the repository to `~/.config/clawd-in-ghostty` and prints the remaining steps. It does not edit your config files.
+These are the conditions it was built and tested under. If any of them differ, expect nothing to show up.
 
-1. **Ghostty.** Add to `~/.config/ghostty/config` and reload.
+- **macOS only.** Tested with Ghostty 1.3.1 and tmux 3.8 on macOS. The shader expects Ghostty on macOS to hand it colors converted to Display P3, so it is unlikely to work on Linux.
+- **Ghostty padding must be extended.** The shader reads the first marker value from the corner of the window padding, so the padding has to take the color of the edge cells.
 
-   ```
-   custom-shader = ~/.config/clawd-in-ghostty/shaders/clawd.glsl
-   custom-shader-animation = true
-   ```
+  ```
+  window-padding-color = extend-always
+  ```
 
-2. **tmux.** Add to the end of `~/.tmux.conf` and reload.
+- **tmux status bar at the top.** The marker cells sit at the right end of the top row. `tmux/clawd.tmux` sets `status-position top` and `status-interval 1`, and appends to `status-right`.
+- **Claude Code hooks.** `claude/clawd-state.sh` records each pane's state in `~/.claude/pane-state.json`. The hooks it needs are listed in `claude/settings.example.json`.
+- **Paths.** `tmux/clawd.tmux` and `claude/settings.example.json` refer to the repository as `~/.config/clawd-in-ghostty`. Clone or link it there, or edit the paths.
+- **`jq`** is used by the marker script and the hook.
+- **Optional shell hooks.** `shell/clawd.fish` and `shell/clawd.zsh` mark failed commands and successful `git push` for the red edge and the fireworks.
 
-   ```
-   source-file ~/.config/clawd-in-ghostty/tmux/clawd.tmux
-   ```
+## Files
 
-   This moves the status bar to the top and appends the marker cells to `status-right`.
-
-3. **Claude Code.** Merge the hooks in `claude/settings.example.json` into `~/.claude/settings.json`.
-
-4. **Shell, optional.**
-
-   ```sh
-   # fish
-   ln -s ~/.config/clawd-in-ghostty/shell/clawd.fish ~/.config/fish/conf.d/
-   # zsh
-   echo 'source ~/.config/clawd-in-ghostty/shell/clawd.zsh' >> ~/.zshrc
-   ```
-
-## Customize
-
-- **Glow color.** Set `@clawd_color` in tmux. If you already set `@tab_color` per window, that is used instead.
-- **Timing and sizes.** Constants at the top of `shaders/clawd.glsl`, such as `MASCOT_ACTION` and `DEV_ACTION`, control how often the characters change moves.
-- **State file.** Set `CLAWD_STATE_FILE` to keep Claude's pane state somewhere other than `~/.claude/pane-state.json`.
-
-## Troubleshooting
-
-- **Nothing happens.** Make sure the status bar is at the top and `status-right` ends with the marker. A row of odd colored cells at the top right means tmux works but the shader is not loaded.
-- **Clawd never appears.** Check that `~/.claude/pane-state.json` changes while Claude is working. If not, the hooks are not set up.
-- **Colors look off on another display.** The marker survives small color shifts, but a custom color profile in Ghostty may break it.
+| Path | What it is |
+|---|---|
+| `shaders/clawd.glsl` | The Ghostty shader that draws everything |
+| `scripts/pane-marker.sh` | Encodes pane positions and states into the status bar cells |
+| `tmux/clawd.tmux` | tmux settings that call the marker script |
+| `claude/clawd-state.sh` | Claude Code hook that records each pane's state |
+| `claude/settings.example.json` | The hooks to register in Claude Code |
+| `shell/` | fish and zsh hooks for failed commands and `git push` |
+| `tools/render-demo.py` | Renders the shader headlessly, for checking changes without a terminal |
 
 ## Credits
 
